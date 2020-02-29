@@ -14,6 +14,9 @@
 ///==========SurfCut Macro==========///
 ///=================================///
 
+
+DEBUG = true;
+
 do{
 ///Ask the user to choose between Calibration and Batch mode
 Dialog.create("SurfCut");
@@ -487,3 +490,21 @@ Dialog.addChoice("More", newArray("Yes", "No, I'm done"));
 Dialog.show();
 More = Dialog.getChoice();
 } while (More=="Yes");
+
+
+
+
+function get_mask(Rad, Thld){
+	if(DEBUG){
+		print("get_mask debug message");
+		print("rad: "+Rad);
+		print("tr: " + Thld);
+	}
+	run("8-bit");
+	run("Gaussian Blur...", "sigma=&Rad stack");
+	
+	///Threshold
+	setThreshold(0, Thld);
+	run("Convert to Mask", "method=Default background=Light");
+	run("Invert", "stack");
+}
